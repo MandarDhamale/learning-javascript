@@ -1,0 +1,13 @@
+learned:
+
+1. developer tools
+2. comments, variables & constants
+3. keywords, datatypes
+4. numbers datatype
+5. strings in js
+6. string template
+7. arrays
+8. undefined & null
+9. comparions & boolean
+10. loose & strict comparison types
+11. type comparisons
