@@ -12,3 +12,14 @@ learned:
 10. loose & strict comparison types
 11. type comparisons
 12. decision making in js
+13. for loop
+14. while & do while loops
+15. break & continue 
+16. variables, scopes & code blocks
+17. js functions
+    a. functions & function expressions
+    b. parameters & arguments
+    c. return values
+    d. arrow functions 
+    e. methods & functions 
+    f. foreach methods 
