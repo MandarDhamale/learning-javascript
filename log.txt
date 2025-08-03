@@ -1,5 +1,7 @@
 learned:
 
+1-Aug-2025
+
 1. developer tools
 2. comments, variables & constants
 3. keywords, datatypes
@@ -11,6 +13,9 @@ learned:
 9. comparions & boolean
 10. loose & strict comparison types
 11. type comparisons
+
+2-Aug-2025
+
 12. decision making in js
 13. for loop
 14. while & do while loops
@@ -22,4 +27,12 @@ learned:
     c. return values
     d. arrow functions 
     e. methods & functions 
-    f. foreach methods 
+    f. foreach methods
+18. object literals
+19. this keyword
+20. DOM
+    a.dom object
+    b. query selectors
+    c. query selector all
+    d. ele. by id class and tag
+    e. changing page content
