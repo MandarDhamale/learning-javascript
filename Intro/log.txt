@@ -30,6 +30,9 @@ learned:
     f. foreach methods
 18. object literals
 19. this keyword
+
+3-Aug-2025
+
 20. DOM
     a.dom object
     b. query selectors
@@ -43,3 +46,18 @@ learned:
     d. find
     e. sort
     f. chaining methods
+
+4-Aug-2025
+
+22. Async
+    a. http requests
+    b. status codes 
+        i. 100 - 199 -> Information 
+        ii. 200 - 299 -> Succes 
+        iii. 300 - 399 -> Redirection
+        iv. 400 - 499 -> Client error
+        v. 500 - 599 -> Server error
+    c. callback functions
+    d. promise in js
+    e. fetch api
+    f. async & await
