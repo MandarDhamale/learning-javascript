@@ -36,3 +36,10 @@ learned:
     c. query selector all
     d. ele. by id class and tag
     e. changing page content
+21. Array methods
+    a. filter
+    b. map
+    c. reduce
+    d. find
+    e. sort
+    f. chaining methods
