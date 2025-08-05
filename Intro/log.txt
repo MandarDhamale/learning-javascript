@@ -61,3 +61,7 @@ learned:
     d. promise in js
     e. fetch api
     f. async & await
+
+5-Aug-205
+
+23. React setup
