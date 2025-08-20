@@ -8,7 +8,7 @@ import MainCard from 'components/MainCard';
 // ==============================|| SAMPLE PAGE ||============================== //
 
 
-const apiUrl = "https://jsonplaceholder.typicode.com/todos/1";
+const apiUrl = "http://localhost:8080/";
 
 fetchGetData(apiUrl)
   .then(res => {
@@ -30,3 +30,4 @@ export default function SamplePage() {
     </MainCard>
   );
 }
+ 
