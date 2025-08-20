@@ -1,10 +1,22 @@
 // material-ui
 import Typography from '@mui/material/Typography';
+import fetchGetData from '../../client/client';
 
 // project imports
 import MainCard from 'components/MainCard';
 
 // ==============================|| SAMPLE PAGE ||============================== //
+
+
+const apiUrl = "https://jsonplaceholder.typicode.com/todos/1";
+
+fetchGetData(apiUrl)
+  .then(res => {
+    console.log('Data: ', res.data);
+  })
+  .catch(error => {
+    console.log('Error: ', error.message);
+  });
 
 export default function SamplePage() {
   return (

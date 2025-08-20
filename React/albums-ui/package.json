@@ -1,7 +1,7 @@
 {
   "name": "mantis-material-free-react",
   "version": "1.6.0",
-  "homepage": "https://mantisdashboard.com/free",
+  "homepage": "https://mantisdashboard.com/",
   "author": {
     "name": "CodedThemes",
     "email": "codedthemes@gmail.com",
@@ -31,6 +31,7 @@
     "@mui/system": "7.0.2",
     "@mui/x-charts": "8.1.0",
     "@vitejs/plugin-react": "4.6.0",
+    "axios": "^1.11.0",
     "formik": "2.4.6",
     "framer-motion": "12.8.2",
     "lodash-es": "4.17.21",
