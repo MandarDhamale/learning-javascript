@@ -7,17 +7,6 @@ import MainCard from 'components/MainCard';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-
-const apiUrl = "http://localhost:8080/";
-
-fetchGetData(apiUrl)
-  .then(res => {
-    console.log('Data: ', res.data);
-  })
-  .catch(error => {
-    console.log('Error: ', error.message);
-  });
-
 export default function SamplePage() {
   return (
     <MainCard title="Sample Card">

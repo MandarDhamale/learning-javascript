@@ -1,31 +1,46 @@
 import React from 'react';
 import { useState } from 'react';
-import {Button, TextField, Container} from '@mui/material'
+import { Button, TextField, Container } from '@mui/material';
+import { fetchPostData } from '../../client/client';
+import { useNavigate } from 'react-router';
 
 export default function AuthLogin({ isDemo = false }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
+  const [loginError, setLoginError] = useState('');
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const validatePassword = () => {
-    return password.length >= 6 && password.length <= 15;
-  };
+  // const validatePassword = () => {
+  //   return password.length >= 6 && password.length <= 15;
+  // };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setErrors({ email: '', password: '' });
 
     if (!validateEmail(email)) {
       setErrors((prevErrors) => ({ ...prevErrors, email: 'Invalid email format' }));
     }
 
-    if (!validatePassword()) {
-      setErrors((prevErrors) => ({ ...prevErrors, password: 'Password must be atleast 6 characters' }));
-    }
+    // if (!validatePassword()) {
+    //   setErrors((prevErrors) => ({ ...prevErrors, password: 'Password must be atleast 6 characters' }));
+    // }
+
+    fetchPostData('/api/v1/auth/token', { email, password })
+      .then((response) => {
+        const { token } = response.data;
+        setLoginError('');
+        localStorage.setItem('token', token);
+      })
+      .catch((error) => {
+        console.log('Login error: ', error);
+        setLoginError('An error occured during login');
+      });
+
     console.log('Logging in with: ', email, password);
   };
 
@@ -55,6 +70,7 @@ export default function AuthLogin({ isDemo = false }) {
       <Button variant="contained" color="primary" fullWidth onClick={handleLogin}>
         Login
       </Button>
+      {loginError && <p style={{color: 'red'}}>{loginError}</p>}
     </Container>
   );
 }
