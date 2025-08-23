@@ -3,12 +3,22 @@ import { useState } from 'react';
 import { Button, TextField, Container } from '@mui/material';
 import { fetchPostData } from '../../client/client';
 import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
 
 export default function AuthLogin({ isDemo = false }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
+
+
+  useEffect(() => { 
+    const isLoggedIn = localStorage.getItem('token');
+    if(isLoggedIn){
+      navigate('/');
+    }
+  })
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -35,6 +45,7 @@ export default function AuthLogin({ isDemo = false }) {
         const { token } = response.data;
         setLoginError('');
         localStorage.setItem('token', token);
+        navigate('/')
       })
       .catch((error) => {
         console.log('Login error: ', error);
