@@ -9,6 +9,8 @@ const icons = {
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
 
+const isLoggedIn = !!localStorage.getItem('token');
+
 const pages = {
   id: 'authentication',
   title: 'Authentication',
@@ -18,17 +20,19 @@ const pages = {
       id: 'login1',
       title: 'Login',
       type: 'item',
-      url: '/login',
+      url: isLoggedIn ? '' : '/login',  
       icon: icons.LoginOutlined,
-      target: true
+      target: !isLoggedIn,               
+      disabled: isLoggedIn               
     },
     {
       id: 'register1',
       title: 'Register',
       type: 'item',
-      url: '/register',
+      url: isLoggedIn ? '' : '/register',
       icon: icons.ProfileOutlined,
-      target: true
+      target: !isLoggedIn,
+      disabled: isLoggedIn
     }
   ]
 };

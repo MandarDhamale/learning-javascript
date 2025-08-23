@@ -46,6 +46,7 @@ export default function AuthLogin({ isDemo = false }) {
         setLoginError('');
         localStorage.setItem('token', token);
         navigate('/')
+        window.location.reload();
       })
       .catch((error) => {
         console.log('Login error: ', error);
