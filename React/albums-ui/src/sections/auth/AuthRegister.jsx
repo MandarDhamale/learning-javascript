@@ -17,6 +17,7 @@ export default function AuthRegister({ isDemo = false }) {
     const isLoggedIn = localStorage.getItem('token');
     if(isLoggedIn){
       navigate('/');
+      window.location.reload();
     }
   })
 
@@ -43,7 +44,8 @@ export default function AuthRegister({ isDemo = false }) {
     fetchPostData('/api/v1/auth/users/add', { email, password })
       .then((response) => {
         setLoginError('');
-        navigate('/login')
+        navigate('/login');
+        window.location.reload();
       })
       .catch((error) => {
         console.log('Login error: ', error);

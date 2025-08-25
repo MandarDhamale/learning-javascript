@@ -20,12 +20,12 @@ export default function HeaderContent() {
 
   return (
     <>
-      {!downLG && <Search />}
-      {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
+      {/* {!downLG && <Search />}
+      {downLG && <Box sx={{ width: '100%', ml: 1 }} />} */}
 
 
-      {!downLG && <Profile />}
-      {downLG && <MobileSection />}
+      {/* {!downLG && <Profile />}
+      {downLG && <MobileSection />} */}
     </>
   );
 }
