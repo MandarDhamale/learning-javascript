@@ -17,6 +17,7 @@ export default function AuthLogin({ isDemo = false }) {
     const isLoggedIn = localStorage.getItem('token');
     if(isLoggedIn){
       navigate('/');
+      window.location.reload();
     }
   })
 
@@ -45,7 +46,7 @@ export default function AuthLogin({ isDemo = false }) {
         const { token } = response.data;
         setLoginError('');
         localStorage.setItem('token', token);
-        navigate('/')
+        navigate('/');
         window.location.reload();
       })
       .catch((error) => {
