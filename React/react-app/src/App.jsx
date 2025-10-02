@@ -5,9 +5,16 @@ import './App.css'
 
 function App() {
 
-  return (<div className="App">
-      <h1>Hello World!</h1>
-    </div>);
+  const fruitlist = ['apple', 'banana', 'cherry'];
+
+
+  return (
+  
+    <ul>
+      {fruitlist.map(fruit => <li key={fruit}>{fruit}</li>)}
+    </ul>
+  
+  );
 
 }
 
