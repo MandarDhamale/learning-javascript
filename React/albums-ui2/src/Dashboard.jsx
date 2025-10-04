@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Card, Button } from 'react-bootstrap';
 
 function Dashboard() {
   const navigate = useNavigate();
 
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [eror, setError] = useState(null);
+  const [error, setError] = useState(null);
 
  useEffect(() => {
     // 1. Define the async function that will do the fetching
@@ -43,11 +44,35 @@ function Dashboard() {
     navigate("/login");
   };
 
+  if(loading){
+    return <div>Loading...</div>;
+  }
+  if(error){
+    return (
+      <div>
+        <p>Error: {error}</p>
+        <button onClick={handleLogout}>Go to Login</button>
+      </div>
+    )
+  }
+
   return (
-    <div>
-      <h1>Welcome to your Dashboard!</h1>
-      <p>You are successfully logged in.</p>
-      <button onClick={handleLogout}>Logout</button>
+    <div>      
+      <h3>Your Albums</h3>
+      {albums.length === 0 ? (
+        <p>No albums found.</p>
+      ) : (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          {albums.map((album) => (
+            <Card key={album.id} style={{ width: '18rem' }}>
+              <Card.Body>
+                <Card.Title>{album.name}</Card.Title>
+                <Card.Text>{album.description}</Card.Text>
+              </Card.Body>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
