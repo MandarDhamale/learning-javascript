@@ -9,6 +9,30 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+  const handleDelete = async (albumId) => {
+      const authToken = localStorage.getItem("authToken");
+      const comfirmDelete = window.confirm("Are you sure you want to delete this album?");
+      if(!comfirmDelete){
+        return;
+      }
+      try{
+        const response = await fetch(`http://localhost:8080/api/v1/album/albums/${albumId}/delete`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          },
+        })
+        console.log(albumId);
+        if (!response.ok) {
+          throw new Error('Failed to delete album. Please try again.');
+        }
+        setAlbums(albums.filter(album => album.id !== albumId));
+      }catch(error){
+        window.alert(error.message);
+      }
+  }
+
  useEffect(() => {
     // 1. Define the async function that will do the fetching
     const fetchAlbums = async () => {
@@ -68,6 +92,7 @@ function Dashboard() {
               <Card.Body>
                 <Card.Title>{album.name}</Card.Title>
                 <Card.Text>{album.description}</Card.Text>
+                <Button variant="danger" onClick={() => handleDelete(album.id)}>Delete</Button>
               </Card.Body>
             </Card>
           ))}
