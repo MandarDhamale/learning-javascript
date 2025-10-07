@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button } from "react-bootstrap";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -8,50 +8,59 @@ function Dashboard() {
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [editingAlbumId, setEditingAlbumId] = useState(null);
 
   const handleDelete = async (albumId) => {
-      const authToken = localStorage.getItem("authToken");
-      const comfirmDelete = window.confirm("Are you sure you want to delete this album?");
-      if(!comfirmDelete){
-        return;
-      }
-      try{
-        const response = await fetch(`http://localhost:8080/api/v1/album/albums/${albumId}/delete`, {
-          method: 'DELETE',
+    const authToken = localStorage.getItem("authToken");
+    const comfirmDelete = window.confirm(
+      "Are you sure you want to delete this album?"
+    );
+    if (!comfirmDelete) {
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/v1/album/albums/${albumId}/delete`,
+        {
+          method: "DELETE",
           headers: {
-            'Authorization': `Bearer ${authToken}`,
+            Authorization: `Bearer ${authToken}`,
           },
-        })
-        console.log(albumId);
-        if (!response.ok) {
-          throw new Error('Failed to delete album. Please try again.');
         }
-        setAlbums(albums.filter(album => album.id !== albumId));
-      }catch(error){
-        window.alert(error.message);
+      );
+      console.log(albumId);
+      if (!response.ok) {
+        throw new Error("Failed to delete album. Please try again.");
       }
-  }
+      setAlbums(albums.filter((album) => album.id !== albumId));
+    } catch (error) {
+      window.alert(error.message);
+    }
+  };
 
- useEffect(() => {
+  useEffect(() => {
     // 1. Define the async function that will do the fetching
     const fetchAlbums = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
-        const response = await fetch("http://localhost:8080/api/v1/album/albums", {
-          headers: {
-            Authorization: "Bearer " + authToken,
-          },
-        });
+        const response = await fetch(
+          "http://localhost:8080/api/v1/album/albums",
+          {
+            headers: {
+              Authorization: "Bearer " + authToken,
+            },
+          }
+        );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch albums. Please try logging in again.");
+          throw new Error(
+            "Failed to fetch albums. Please try logging in again."
+          );
         }
 
         const data = await response.json();
         setAlbums(data); // Success! Update the albums.
         console.log(data);
-
       } catch (err) {
         setError(err.message); // An error happened. Update the error state.
       } finally {
@@ -68,31 +77,60 @@ function Dashboard() {
     navigate("/login");
   };
 
-  if(loading){
+  if (loading) {
     return <div>Loading...</div>;
   }
-  if(error){
+  if (error) {
     return (
       <div>
         <p>Error: {error}</p>
         <button onClick={handleLogout}>Go to Login</button>
       </div>
-    )
+    );
   }
 
   return (
-    <div>      
+    <div>
       <h3>Your Albums</h3>
       {albums.length === 0 ? (
         <p>No albums found.</p>
       ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
           {albums.map((album) => (
-            <Card key={album.id} style={{ width: '18rem' }}>
+            <Card key={album.id} style={{ width: "18rem" }}>
               <Card.Body>
-                <Card.Title>{album.name}</Card.Title>
+                {editingAlbumId === album.id ? (
+                  <input type="text" defaultValue={album.name} />
+                ) : (
+                  <Card.Title>{album.name}</Card.Title>
+                )}
                 <Card.Text>{album.description}</Card.Text>
-                <Button variant="danger" onClick={() => handleDelete(album.id)}>Delete</Button>
+                {editingAlbumId === album.id ? (
+                  // If TRUE (we are in edit mode for this album)
+                  <>
+                    <Button variant="success">Save</Button>
+                    <Button variant="secondary" className="ms-2">
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  // If FALSE (we are NOT in edit mode for this album)
+                  <>
+                    <Button
+                      variant="primary"
+                      onClick={() => setEditingAlbumId(album.id)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="danger"
+                      className="ms-2"
+                      onClick={() => handleDelete(album.id)}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
               </Card.Body>
             </Card>
           ))}
