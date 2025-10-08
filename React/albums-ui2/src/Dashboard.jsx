@@ -9,6 +9,8 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingAlbumId, setEditingAlbumId] = useState(null);
+  const [editedName, setEditedName] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
 
   const handleDelete = async (albumId) => {
     const authToken = localStorage.getItem("authToken");
@@ -100,16 +102,20 @@ function Dashboard() {
             <Card key={album.id} style={{ width: "18rem" }}>
               <Card.Body>
                 {editingAlbumId === album.id ? (
-                  <input type="text" defaultValue={album.name} />
+                  <input type="text" defaultValue={editedName} onChange={(e) => setEditedName(e.target.value)}/>
                 ) : (
                   <Card.Title>{album.name}</Card.Title>
                 )}
-                <Card.Text>{album.description}</Card.Text>
+
+                {editingAlbumId == album.id ? (
+                  <textarea defaultValue={editedDescription} onChange={(e) => setEditedDescription(e.target.value)}></textarea>
+                ):(<Card.Text>{album.description}</Card.Text>)}
+                
                 {editingAlbumId === album.id ? (
                   // If TRUE (we are in edit mode for this album)
                   <>
                     <Button variant="success">Save</Button>
-                    <Button variant="secondary" className="ms-2">
+                    <Button variant="secondary" className="ms-2" onClick={() => setEditingAlbumId(null)}>
                       Cancel
                     </Button>
                   </>
@@ -118,7 +124,7 @@ function Dashboard() {
                   <>
                     <Button
                       variant="primary"
-                      onClick={() => setEditingAlbumId(album.id)}
+                      onClick={() => {setEditingAlbumId(album.id);setEditedName(album.name);setEditedDescription(album.description);}}
                     >
                       Edit
                     </Button>
