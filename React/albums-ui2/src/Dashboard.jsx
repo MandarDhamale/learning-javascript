@@ -79,6 +79,49 @@ function Dashboard() {
     navigate("/login");
   };
 
+  const handleUpdate = async (albumId) => {
+
+    try{
+      const authToken = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:8080/api/v1/album/albums/${albumId}/update`, {
+        method: 'PUT',
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${authToken}`
+        },
+        body: JSON.stringify({
+          name: editedName,
+          description: editedDescription
+        })
+      })
+      console.log(response);
+
+       if (!response.ok) {
+      throw new Error("Failed to update the album.");
+    }
+
+
+        const updatedAlbums = albums.map(album => {
+          if(album.id == albumId){
+            return {...album, name: editedName, description: editedDescription}
+          }
+          return album;
+        });
+        setAlbums(updatedAlbums);
+      
+
+    }catch(error){
+      setError(error.message());
+    }finally{
+
+      
+
+      setEditingAlbumId(null);
+
+
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -114,7 +157,7 @@ function Dashboard() {
                 {editingAlbumId === album.id ? (
                   // If TRUE (we are in edit mode for this album)
                   <>
-                    <Button variant="success">Save</Button>
+                    <Button variant="success" onClick={() => handleUpdate(album.id)}>Save</Button>
                     <Button variant="secondary" className="ms-2" onClick={() => setEditingAlbumId(null)}>
                       Cancel
                     </Button>
