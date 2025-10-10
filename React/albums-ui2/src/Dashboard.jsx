@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Card, Button } from "react-bootstrap";
 
 function Dashboard() {
@@ -111,7 +111,7 @@ function Dashboard() {
       
 
     }catch(error){
-      setError(error.message());
+      setError(error.message);
     }finally{
 
       
@@ -147,7 +147,9 @@ function Dashboard() {
                 {editingAlbumId === album.id ? (
                   <input type="text" defaultValue={editedName} onChange={(e) => setEditedName(e.target.value)}/>
                 ) : (
+                  <Link to={`/albums/${album.id}`}>
                   <Card.Title>{album.name}</Card.Title>
+                  </Link>
                 )}
 
                 {editingAlbumId == album.id ? (
