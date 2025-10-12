@@ -113,12 +113,7 @@ function Dashboard() {
     }catch(error){
       setError(error.message);
     }finally{
-
-      
-
       setEditingAlbumId(null);
-
-
     }
   }
 
@@ -145,7 +140,7 @@ function Dashboard() {
             <Card key={album.id} style={{ width: "18rem" }}>
               <Card.Body>
                 {editingAlbumId === album.id ? (
-                  <input type="text" defaultValue={editedName} onChange={(e) => setEditedName(e.target.value)}/>
+                  <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)}/>
                 ) : (
                   <Link to={`/albums/${album.id}`}>
                   <Card.Title>{album.name}</Card.Title>
@@ -153,7 +148,7 @@ function Dashboard() {
                 )}
 
                 {editingAlbumId == album.id ? (
-                  <textarea defaultValue={editedDescription} onChange={(e) => setEditedDescription(e.target.value)}></textarea>
+                  <textarea value={editedDescription} onChange={(e) => setEditedDescription(e.target.value)}></textarea>
                 ):(<Card.Text>{album.description}</Card.Text>)}
                 
                 {editingAlbumId === album.id ? (

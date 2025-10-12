@@ -6,7 +6,7 @@ function Layout() {
   return (
     <div>
       <AppNavbar />
-      <main style={{ padding: '2rem' }}>
+      <main style={{ padding: '1rem' }}>
         <Outlet />
       </main>
     </div>
