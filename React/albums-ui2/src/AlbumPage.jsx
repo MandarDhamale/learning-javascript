@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Card } from "react-bootstrap";
 
 function AlbumPage() {
   const { albumId } = useParams();
@@ -53,7 +54,21 @@ function AlbumPage() {
     return <div>Album not found</div>;
   }
 
-  return <div>Album Page (ID:{albumId})</div>;
+return (
+  <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+    {album.photos.map((photo) => (
+      <Card key={photo.id} style={{ width: "18rem" }}>
+        <Card.Img src={`http://localhost:8080/api/v1/album/albums/${albumId}/photos/${photo.id}/download-thumbnail`} alt={photo.name} />
+        <Card.Body>
+          <Card.Text>{photo.name}</Card.Text>
+          <Card.Text>{photo.description}</Card.Text>
+          <Card.Text>{photo.fileName}</Card.Text>
+        </Card.Body>
+      </Card>
+    ))}
+  </div>
+);
+//TODO: Image data loaded, not need to work on getting the images
 }
 
 export default AlbumPage;
