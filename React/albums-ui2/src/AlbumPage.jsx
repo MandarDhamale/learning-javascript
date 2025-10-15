@@ -8,6 +8,7 @@ function AlbumPage() {
   const [album, setAlbum] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [photoUrls, setPhotoUrls] = useState({});
 
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -29,6 +30,24 @@ function AlbumPage() {
         const data = await response.json();
         console.log(data);
         setAlbum(data);
+
+      data.photos.map(async (photo) => {
+        const response = await fetch(`http://localhost:8080/api/v1/album/albums/${albumId}/photos/${photo.id}/download-thumbnail`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          }
+        })
+
+        const imageBlob = await response.blob(); 
+        const temporaryUrl = URL.createObjectURL(imageBlob);
+        setPhotoUrls(prevUrls => ({ ...prevUrls, [photo.id]: temporaryUrl }));
+
+        console.log("hi: " + response);
+
+      })
+
+
+
       } catch (error) {
         setError(error.message);
       } finally {
@@ -58,7 +77,7 @@ return (
   <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
     {album.photos.map((photo) => (
       <Card key={photo.id} style={{ width: "18rem" }}>
-        <Card.Img src={`http://localhost:8080/api/v1/album/albums/${albumId}/photos/${photo.id}/download-thumbnail`} alt={photo.name} />
+        <Card.Img src={photoUrls[photo.id]} alt={photo.name} />
         <Card.Body>
           <Card.Text>{photo.name}</Card.Text>
           <Card.Text>{photo.description}</Card.Text>
