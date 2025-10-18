@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
+
 
 function AlbumPage() {
   const { albumId } = useParams();
@@ -9,6 +10,37 @@ function AlbumPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [photoUrls, setPhotoUrls] = useState({});
+
+  const handleDelete = async (album_id, photo_id) => {
+    const authToken = localStorage.getItem('authToken');
+    const confirmDelete = window.confirm('Are you sure you want to delete this photo?');
+
+    if(!confirmDelete){
+      return;
+    }else{
+      try{
+
+        const response = await fetch(`http://localhost:8080/api/v1/album/albums/${album_id}/photos/${photo_id}/delete`, {
+          method: "DELETE",
+          headers: {
+            Authorization: 'Bearer ' + authToken
+          }
+        });
+
+        if(!response.ok){
+          throw new Error("Failed to delete photo");
+        }
+        setAlbum(prevAlbum => ({
+      ...prevAlbum,
+      photos: prevAlbum.photos.filter(photo => photo.id !== photo_id)
+    }));
+      }catch(error){
+        setError(error.message);
+        window.alert(error.message);
+      }
+    }
+
+  }
 
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -46,8 +78,6 @@ function AlbumPage() {
 
       })
 
-
-
       } catch (error) {
         setError(error.message);
       } finally {
@@ -82,12 +112,12 @@ return (
           <Card.Text>{photo.name}</Card.Text>
           <Card.Text>{photo.description}</Card.Text>
           <Card.Text>{photo.fileName}</Card.Text>
+          <Button variant="danger" onClick={() => handleDelete(albumId, photo.id)}>Delete</Button>
         </Card.Body>
       </Card>
     ))}
   </div>
 );
-//TODO: Image data loaded, not need to work on getting the images
 }
 
 export default AlbumPage;

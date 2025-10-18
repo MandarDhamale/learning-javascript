@@ -30,7 +30,6 @@ function Dashboard() {
           },
         }
       );
-      console.log(albumId);
       if (!response.ok) {
         throw new Error("Failed to delete album. Please try again.");
       }
