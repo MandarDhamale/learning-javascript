@@ -10,6 +10,7 @@ function AlbumPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [photoUrls, setPhotoUrls] = useState({});
+  const [editingPhotoId, setEditingPhotoId] = useState(null);
 
   const handleDelete = async (album_id, photo_id) => {
     const authToken = localStorage.getItem('authToken');
