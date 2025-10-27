@@ -9,8 +9,8 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingAlbumId, setEditingAlbumId] = useState(null);
-  const [editedName, setEditedName] = useState('');
-  const [editedDescription, setEditedDescription] = useState('');
+  const [editedName, setEditedName] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
 
   const handleDelete = async (albumId) => {
     const authToken = localStorage.getItem("authToken");
@@ -79,42 +79,41 @@ function Dashboard() {
   };
 
   const handleUpdate = async (albumId) => {
-
-    try{
-      const authToken = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:8080/api/v1/album/albums/${albumId}/update`, {
-        method: 'PUT',
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          name: editedName,
-          description: editedDescription
-        })
-      })
+    try {
+      const authToken = localStorage.getItem("authToken");
+      const response = await fetch(
+        `http://localhost:8080/api/v1/album/albums/${albumId}/update`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify({
+            name: editedName,
+            description: editedDescription,
+          }),
+        }
+      );
       console.log(response);
 
-       if (!response.ok) {
-      throw new Error("Failed to update the album.");
-    }
+      if (!response.ok) {
+        throw new Error("Failed to update the album.");
+      }
 
-
-        const updatedAlbums = albums.map(album => {
-          if(album.id == albumId){
-            return {...album, name: editedName, description: editedDescription}
-          }
-          return album;
-        });
-        setAlbums(updatedAlbums);
-      
-
-    }catch(error){
+      const updatedAlbums = albums.map((album) => {
+        if (album.id == albumId) {
+          return { ...album, name: editedName, description: editedDescription };
+        }
+        return album;
+      });
+      setAlbums(updatedAlbums);
+    } catch (error) {
       setError(error.message);
-    }finally{
+    } finally {
       setEditingAlbumId(null);
     }
-  }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -139,22 +138,40 @@ function Dashboard() {
             <Card key={album.id} style={{ width: "18rem" }}>
               <Card.Body>
                 {editingAlbumId === album.id ? (
-                  <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)}/>
+                  <input
+                    type="text"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                  />
                 ) : (
                   <Link to={`/albums/${album.id}`}>
-                  <Card.Title>{album.name}</Card.Title>
+                    <Card.Title>{album.name}</Card.Title>
                   </Link>
                 )}
 
                 {editingAlbumId == album.id ? (
-                  <textarea value={editedDescription} onChange={(e) => setEditedDescription(e.target.value)}></textarea>
-                ):(<Card.Text>{album.description}</Card.Text>)}
-                
+                  <textarea
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                  ></textarea>
+                ) : (
+                  <Card.Text>{album.description}</Card.Text>
+                )}
+
                 {editingAlbumId === album.id ? (
                   // If TRUE (we are in edit mode for this album)
                   <>
-                    <Button variant="success" onClick={() => handleUpdate(album.id)}>Save</Button>
-                    <Button variant="secondary" className="ms-2" onClick={() => setEditingAlbumId(null)}>
+                    <Button
+                      variant="success"
+                      onClick={() => handleUpdate(album.id)}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="ms-2"
+                      onClick={() => setEditingAlbumId(null)}
+                    >
                       Cancel
                     </Button>
                   </>
@@ -163,7 +180,11 @@ function Dashboard() {
                   <>
                     <Button
                       variant="primary"
-                      onClick={() => {setEditingAlbumId(album.id);setEditedName(album.name);setEditedDescription(album.description);}}
+                      onClick={() => {
+                        setEditingAlbumId(album.id);
+                        setEditedName(album.name);
+                        setEditedDescription(album.description);
+                      }}
                     >
                       Edit
                     </Button>

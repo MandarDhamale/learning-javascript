@@ -104,16 +104,24 @@ function AlbumPage() {
     return <div>Album not found</div>;
   }
 
+  // <Card.Text>{photo.name}</Card.Text>
+          // <Card.Text>{photo.description}</Card.Text>
+
 return (
   <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
     {album.photos.map((photo) => (
       <Card key={photo.id} style={{ width: "18rem" }}>
         <Card.Img src={photoUrls[photo.id]} alt={photo.name} />
         <Card.Body>
-          <Card.Text>{photo.name}</Card.Text>
-          <Card.Text>{photo.description}</Card.Text>
+          {editingPhotoId == photo.id ? (<input type="text" defaultValue={photo.name} />) : (
+            <Card.Text>{photo.name}</Card.Text>
+          )}
+          {editingPhotoId == photo.id ? (<input type="text" defaultValue={photo.description} />) : (
+            <Card.Text>{photo.description}</Card.Text>
+          )}
           <Card.Text>{photo.fileName}</Card.Text>
-          <Button variant="danger" onClick={() => handleDelete(albumId, photo.id)}>Delete</Button>
+          <Button variant="danger" className="ms-2" onClick={() => handleDelete(albumId, photo.id)}>Delete</Button>
+          <Button variant="success" className="ms-2" onClick={() => setEditingPhotoId(photo.id)}>Edit</Button>
         </Card.Body>
       </Card>
     ))}
