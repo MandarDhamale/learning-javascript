@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Card, Button } from "react-bootstrap";
-
 
 function AlbumPage() {
   const { albumId } = useParams();
@@ -11,37 +10,42 @@ function AlbumPage() {
   const [error, setError] = useState(null);
   const [photoUrls, setPhotoUrls] = useState({});
   const [editingPhotoId, setEditingPhotoId] = useState(null);
+  const [editedPhotoName, seteditedPhotoName] = useState("");
+  const [editedPhotoDescription, seteditedPhotoDescription] = useState("");
 
   const handleDelete = async (album_id, photo_id) => {
-    const authToken = localStorage.getItem('authToken');
-    const confirmDelete = window.confirm('Are you sure you want to delete this photo?');
+    const authToken = localStorage.getItem("authToken");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this photo?"
+    );
 
-    if(!confirmDelete){
+    if (!confirmDelete) {
       return;
-    }else{
-      try{
-
-        const response = await fetch(`http://localhost:8080/api/v1/album/albums/${album_id}/photos/${photo_id}/delete`, {
-          method: "DELETE",
-          headers: {
-            Authorization: 'Bearer ' + authToken
+    } else {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/v1/album/albums/${album_id}/photos/${photo_id}/delete`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: "Bearer " + authToken,
+            },
           }
-        });
+        );
 
-        if(!response.ok){
+        if (!response.ok) {
           throw new Error("Failed to delete photo");
         }
-        setAlbum(prevAlbum => ({
-      ...prevAlbum,
-      photos: prevAlbum.photos.filter(photo => photo.id !== photo_id)
-    }));
-      }catch(error){
+        setAlbum((prevAlbum) => ({
+          ...prevAlbum,
+          photos: prevAlbum.photos.filter((photo) => photo.id !== photo_id),
+        }));
+      } catch (error) {
         setError(error.message);
         window.alert(error.message);
       }
     }
-
-  }
+  };
 
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -64,21 +68,24 @@ function AlbumPage() {
         console.log(data);
         setAlbum(data);
 
-      data.photos.map(async (photo) => {
-        const response = await fetch(`http://localhost:8080/api/v1/album/albums/${albumId}/photos/${photo.id}/download-thumbnail`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`
-          }
-        })
+        data.photos.map(async (photo) => {
+          const response = await fetch(
+            `http://localhost:8080/api/v1/album/albums/${albumId}/photos/${photo.id}/download-thumbnail`,
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }
+          );
 
-        const imageBlob = await response.blob(); 
-        const temporaryUrl = URL.createObjectURL(imageBlob);
-        setPhotoUrls(prevUrls => ({ ...prevUrls, [photo.id]: temporaryUrl }));
-
-        console.log("hi: " + response);
-
-      })
-
+          const imageBlob = await response.blob();
+          const temporaryUrl = URL.createObjectURL(imageBlob);
+          setPhotoUrls((prevUrls) => ({
+            ...prevUrls,
+            [photo.id]: temporaryUrl,
+          }));
+          console.log("hi: " + response);
+        });
       } catch (error) {
         setError(error.message);
       } finally {
@@ -105,28 +112,58 @@ function AlbumPage() {
   }
 
   // <Card.Text>{photo.name}</Card.Text>
-          // <Card.Text>{photo.description}</Card.Text>
+  // <Card.Text>{photo.description}</Card.Text>
 
-return (
-  <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-    {album.photos.map((photo) => (
-      <Card key={photo.id} style={{ width: "18rem" }}>
-        <Card.Img src={photoUrls[photo.id]} alt={photo.name} />
-        <Card.Body>
-          {editingPhotoId == photo.id ? (<input type="text" defaultValue={photo.name} />) : (
-            <Card.Text>{photo.name}</Card.Text>
-          )}
-          {editingPhotoId == photo.id ? (<input type="text" defaultValue={photo.description} />) : (
-            <Card.Text>{photo.description}</Card.Text>
-          )}
-          <Card.Text>{photo.fileName}</Card.Text>
-          <Button variant="danger" className="ms-2" onClick={() => handleDelete(albumId, photo.id)}>Delete</Button>
-          <Button variant="success" className="ms-2" onClick={() => setEditingPhotoId(photo.id)}>Edit</Button>
-        </Card.Body>
-      </Card>
-    ))}
-  </div>
-);
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+      {album.photos.map((photo) => (
+        <Card key={photo.id} style={{ width: "18rem" }}>
+          <Card.Img src={photoUrls[photo.id]} alt={photo.name} />
+          <Card.Body>
+            {editingPhotoId == photo.id ? (
+              <input type="text" value={editedPhotoName} onChange={(e)=> seteditedPhotoName(e.target.value)} />
+            ) : (
+              <Card.Text>{photo.name}</Card.Text>
+            )}
+            {editingPhotoId == photo.id ? (
+              <input type="text" value={editedPhotoDescription} onChange={(e)=> seteditedPhotoDescription(e.target.value)} />
+            ) : (
+              <Card.Text>{photo.description}</Card.Text>
+            )}
+            <Card.Text>{photo.fileName}</Card.Text>
+            {editingPhotoId == photo.id ? (
+              <>
+              <Button variant="success">Save</Button>
+              <Button variant="secondary">Cancel</Button> 
+              </>
+            ) : 
+            (
+              <>
+              <Button
+              variant="danger"
+              className="ms-2"
+              onClick={() => handleDelete(albumId, photo.id)}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="success"
+              className="ms-2"
+              onClick={() => {
+                setEditingPhotoId(photo.id);
+                seteditedPhotoDescription(photo.description);
+                seteditedPhotoName(photo.name);
+              }}
+            >
+              Edit
+            </Button>
+              </>
+            ) }
+          </Card.Body>
+        </Card>
+      ))}
+    </div>
+  );
 }
 
 export default AlbumPage;
